@@ -62,7 +62,7 @@ void loop() {
 ```
 ### Using it with platformio
 
-add the following line to your lib_deps in platformio.ini
+add the following lines to your lib_deps in platformio.ini
  - https://github.com/edwar64896/gspstreamresponse
  - https://github.com/edwar64896/functional-avr
  - https://github.com/edwar64896/gspgrouped
