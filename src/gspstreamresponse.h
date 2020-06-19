@@ -55,16 +55,12 @@ class gspStreamResponse: public gspGrouped {
             gspGrouped::checkAll(gspStreamResponse::firstInstance);
         }
 
-        static void setup(Stream& _stream = Serial) {gspStreamResponse::gspStream = _stream;}
-        static Stream & gspStream;
-
     protected:
+
         void setFirstInstance(gspGrouped * fi) {gspStreamResponse::firstInstance = fi;}
         gspGrouped * getFirstInstance() {return gspStreamResponse::firstInstance;}
         static gspGrouped * firstInstance;
         nonstd::function<void (char *)> cbProcessorNonstd;
-
-
 
     private:
 
@@ -78,12 +74,9 @@ class gspStreamResponse: public gspGrouped {
         uint8_t cursor=0;
         void getChars(uint8_t nChars);
         char * _lastResponse;
-        char getChar();
         int parseWin=0;
 
         char ** _replaceMe;
-
-
 
 };
 

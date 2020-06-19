@@ -1,7 +1,7 @@
 #include <gspstreamresponse.h>
 
 gspGrouped* gspStreamResponse::firstInstance=nullptr;
-Stream & gspStreamResponse::gspStream=Serial;
+
 
 char * gspStreamResponse::getLastResponse() {
     return szResponse; 
@@ -21,18 +21,10 @@ void gspStreamResponse::update() {
     }    
 }
 
-// Get a character from the Stream buffer
-// note this is blocking.
-char gspStreamResponse::getChar()
-{
-  while (!gspStreamResponse::gspStream.available()); 
-  return ((char)gspStreamResponse::gspStream.read()); 
-}
-
 void gspStreamResponse::getChars(uint8_t nChars) {
   uint8_t i=0;
   for (i = 0; i < nChars;  i++) {
-    szResponse[i] = getChar();
+    szResponse[i] = gspGrouped::getChar();
   }
   szResponse[i]=0;
 }
@@ -48,7 +40,7 @@ bool gspStreamResponse::check() {
 
 
     // take a peek at the incoming source.
-    char incoming=gspStreamResponse::gspStream.peek();
+    char incoming=gspGrouped::gspStream.peek();
 
     // anything there?
     if (incoming==-1) {
@@ -65,7 +57,7 @@ bool gspStreamResponse::check() {
 
     // if we are the last instance in the list, then we need to "read" one byte from the Stream input as we are done peeking
     if (getNextInstance()==nullptr)
-        gspStreamResponse::gspStream.read();
+        gspGrouped::gspStream.read();
 
     //only one instance should get this far.
     //TODO: work out how to do a global reset 
@@ -83,16 +75,6 @@ void gspStreamResponse::reset() {
     cursor=0;
     parseWin=0;
 }
-
-//gspStreamResponse::gspStreamResponse(const char* _szHeader, uint8_t _iCharsToGrab,void (* _cbProcessor)(char *))
-//:gspGrouped() {
-//    szHeader=_szHeader;
-//    iCharsToGrab=_iCharsToGrab;
-//    cbProcessor=_cbProcessor;
-//    cursor=0;
-//    operationmode=GSP_SR_MODE_CALLBACK;
-//    szResponse[0]=0;
-//}
 
 gspStreamResponse::gspStreamResponse(const char* _szHeader, uint8_t _iCharsToGrab,nonstd::function<void (char *)> _callback)
 :gspGrouped() {
